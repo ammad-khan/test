@@ -1,0 +1,34 @@
+- hosts: localhost
+  tasks:
+
+    - name: Create directory
+      file: path=/etc/mysql/ssl state=directory
+
+    - name: Generate RSA Key
+      command: openssl genrsa 2048 > /etc/mysql/ssl/ca-key.pem
+      args:
+        creates: "/etc/mysql/ssl/ca-key.pem"
+
+    - name: Generate RSA Key
+      command: openssl req -sha1 -new -subj '/C=US/ST=CA/L=Mountain' -x509 -nodes -days 3650 -key /etc/mysql/ssl/ca-key.pem > /etc/mysql/ssl/ca-cert.pem
+      args:
+        creates: "/etc/mysql/ssl/ca-cert.pem"
+
+#    - name: Generate CSR
+#      command: openssl req \
+#        -new \
+#        -subj '/C=US/ST=CA/L=Mountain'
+#        -key "/etc/mysql/ssl/key.pem" \
+#        -out "/etc/mysql/ssl/csr.pem"
+#      args:
+#        creates: "/etc/mysql/ssl/csr.pem"
+
+#    - name: Generate Self-signed Certificate
+#      command: openssl req \
+#        -x509 \
+#        -days 1825 \
+#        -key "/etc/mysql/ssl/key.pem" \
+#        -in "/etc/mysql/ssl/csr.pem" \
+#        -out "/etc/mysql/ssl/cert.pem"
+#      args:
+#        creates: "/etc/mysql/ssl/cert.pem"
