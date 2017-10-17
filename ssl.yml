@@ -4,14 +4,14 @@
     - name: Create directory
       file: path=/etc/mysql/ssl state=directory
 
-    - name: Generate RSA Key
+    - name: Generate CSR Key
       command: openssl req -sha1 -newkey rsa:2048 -subj '/C=MT/ST=Northern Region/L=Mosta/O=Cloudways Ltd./OU=IT/CN={{ ansible_fqdn }}' -days 730 -nodes \
         -keyout /etc/mysql/ssl/mysql-key.key -out /etc/mysql/ssl/mysql-csr.crt
 
     - name: Add RSA key
       command: openssl rsa -in /etc/mysql/ssl/mysql-key.key -out /etc/mysql/ssl/mysql-key.key
 
-    - name: Add RSA key
+    - name: Create Cert key
       command: openssl x509 -sha1 -req -in /etc/mysql/ssl/mysql-csr.crt -days 730 -CA /etc/mysql/ssl/cloudways_ca.crt -CAkey /etc/mysql/ssl/cloudways_ca.key \
         -set_serial 01 -out /etc/mysql/ssl/mysql-ssl.crt
 
